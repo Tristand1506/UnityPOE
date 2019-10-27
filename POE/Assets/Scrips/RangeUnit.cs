@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class MeleeUnit : Unit
+public class RangeUnit : Unit
 {
     //GLOBALS
     Slider healthSlider;
@@ -11,7 +11,7 @@ public class MeleeUnit : Unit
 
     //constructor 
 
-    public MeleeUnit(float health, float speed, float attDamage, float attRange, int team) : base(health, speed, attDamage, attRange, team)
+    public RangeUnit(float health, float speed, float attDamage, float attRange, int team) : base(health, speed, attDamage, attRange, team)
     {
         Health = health;
         MAX_HEALTH = health;
@@ -23,15 +23,15 @@ public class MeleeUnit : Unit
 
     private void Start()
     {
-        Health = 20;
+        Health = 15;
         MAX_HEALTH = health;
-        Speed = 5;
-        AttDamage = 5;
-        AttRange = 3;
+        Speed = 7;
+        AttDamage = 2;
+        AttRange = 15;
         Team = team;
 
         //initialising health slider
-        
+
         healthSlider = (gameObject.GetComponentInChildren<Canvas>()).GetComponentInChildren<Slider>();
         healthSlider.value = 1;
     }

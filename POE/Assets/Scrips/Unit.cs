@@ -5,12 +5,14 @@ using UnityEngine;
 public abstract class Unit : MonoBehaviour
 {
     //declare global variables
-    private float health;
+    protected float health;
     protected float MAX_HEALTH;
-    private float speed;
-    private float attDammage;
-    private float attRange;
-    private int team;
+    protected float speed;
+    protected float attDamage;
+    protected float attRange;
+    protected int team;
+    protected bool onGround;
+    protected GameObject closest;
 
 
 
@@ -21,7 +23,7 @@ public abstract class Unit : MonoBehaviour
         MAX_HEALTH = health;
         Health = health;
         Speed = speed;
-        AttDammage = attDamage;
+        AttDamage = attDamage;
         AttRange = attRange;
         Team = team;
     }
@@ -33,16 +35,16 @@ public abstract class Unit : MonoBehaviour
 
     protected int Team { get => team; set => team = value; }
 
-    protected float AttDammage
-    { get => attDammage; set
+    protected float AttDamage
+    { get => attDamage; set
         {
             if (value<=0)
             {
-                attDammage = 0;
+                attDamage = 0;
             }
             else
             {
-                attDammage = value;
+                attDamage = value;
             }
         }
     }
@@ -51,13 +53,34 @@ public abstract class Unit : MonoBehaviour
 
     protected float Health { get => health; set => health = value; }
 
+    
+
     //abstarct methods
 
     public abstract void Move();
 
     public abstract void Attack(GameObject target);
 
-    public abstract void Target();
+    public abstract void Damage(float amount);
+
+    //GLOBAL METHODS
+    // checks if unit is on ground
+    private void OnCollisionEnter(Collision col)
+    {
+        if (col.gameObject.CompareTag("Floor"))
+        {
+            onGround = true;
+        }
+    }
+
+    private void OnCollisionExit(Collision col)
+    {
+        if (col.gameObject.CompareTag("Floor"))
+        {
+            onGround = false;
+
+        }
+    }
 
 
 }
