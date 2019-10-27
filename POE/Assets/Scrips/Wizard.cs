@@ -3,15 +3,17 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class MeleeUnit : Unit
+public class Wizard : Unit
 {
+    // Start is called before the first frame update
     //GLOBALS
     Slider healthSlider;
-
+    public List<GameObject> inRadius = new List<GameObject>();
+    float attIntermission;
 
     //constructor 
 
-    public MeleeUnit(float health, float speed, float attDamage, float attRange, int team) : base(health, speed, attDamage, attRange, team)
+    public Wizard(float health, float speed, float attDamage, float attRange, int team) : base(health, speed, attDamage, attRange, team)
     {
         Health = health;
         MAX_HEALTH = health;
@@ -31,7 +33,7 @@ public class MeleeUnit : Unit
         Team = team;
 
         //initialising health slider
-        
+
         healthSlider = (gameObject.GetComponentInChildren<Canvas>()).GetComponentInChildren<Slider>();
         healthSlider.value = 1;
     }
@@ -39,23 +41,6 @@ public class MeleeUnit : Unit
     private void Update()
     {
         Move();
-    }
-
-    public void OnTriggerEnter(Collider col)
-    {
-        if (col.gameObject.CompareTag("Wizard"))
-        {
-            Wizard wiz = col.gameObject.GetComponent<Wizard>();
-            wiz.inRadius.Add(gameObject);
-        }
-    }
-    public void OnTriggerExit(Collider col)
-    {
-        if (col.gameObject.CompareTag("Wizard"))
-        {
-            Wizard wiz = col.gameObject.GetComponent<Wizard>();
-            wiz.inRadius.Remove(gameObject);
-        }
     }
 
     //Methods
@@ -105,29 +90,50 @@ public class MeleeUnit : Unit
                 closest = go;
             }
         }
-        if (closest != null)
+        if (closest!=null)
         {
             transform.LookAt(closest.transform.position);
+            attIntermission += Time.deltaTime;
             if (closestDistance > AttRange && onGround)
             {
                 transform.Translate(Vector3.forward * Speed * Time.deltaTime);
+                
             }
-            else if (closestDistance < AttRange)
+            else if (inRadius.Count>0)
             {
-                Attack(closest);
+                if (attIntermission>=2)
+                { 
+                    FireBall();
+                }
+                
             }
-
-
         }
     }
+
 
     public override void Attack(GameObject target)
     {
         Unit u = target.GetComponent<Unit>();
         if (u != null)
         {
-            u.Damage(AttDamage * Time.deltaTime);
+            u.Damage(AttDamage);
         }
+    }
+
+    
+
+    public void FireBall()
+    {
+        foreach (GameObject go in inRadius)
+        {
+            if (go!=null)
+            {
+                Attack(go);
+            }
+            
+            
+        }
+        attIntermission = 0;
     }
 
     public override void Damage(float amount)

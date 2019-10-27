@@ -27,13 +27,35 @@ public class RangeUnit : Unit
         MAX_HEALTH = health;
         Speed = 7;
         AttDamage = 2;
-        AttRange = 15;
+        AttRange = 35;
         Team = team;
 
         //initialising health slider
 
         healthSlider = (gameObject.GetComponentInChildren<Canvas>()).GetComponentInChildren<Slider>();
         healthSlider.value = 1;
+    }
+
+    private void Update()
+    {
+        Move();
+    }
+
+    public void OnTriggerEnter(Collider col)
+    {
+        if (col.gameObject.CompareTag("Wizard"))
+        {
+            Wizard wiz = col.gameObject.GetComponent<Wizard>();
+            wiz.inRadius.Add(gameObject);
+        }
+    }
+    public void OnTriggerExit(Collider col)
+    {
+        if (col.gameObject.CompareTag("Wizard"))
+        {
+            Wizard wiz = col.gameObject.GetComponent<Wizard>();
+            wiz.inRadius.Remove(gameObject);
+        }
     }
 
     //Methods
@@ -83,12 +105,12 @@ public class RangeUnit : Unit
                 closest = go;
             }
         }
-        if (!closest.Equals(gameObject))
+        if (closest != null)
         {
             transform.LookAt(closest.transform.position);
             if (closestDistance > AttRange && onGround)
             {
-                transform.Translate(transform.forward * Speed * Time.deltaTime);
+                transform.Translate(Vector3.forward * Speed * Time.deltaTime);
             }
             else if (closestDistance < AttRange)
             {
