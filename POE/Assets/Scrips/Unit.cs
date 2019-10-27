@@ -18,7 +18,12 @@ public abstract class Unit : MonoBehaviour
 
     public Unit(float health, float speed, float attDamage, float attRange, int team)
     {
-
+        MAX_HEALTH = health;
+        Health = health;
+        Speed = speed;
+        AttDammage = attDamage;
+        AttRange = attRange;
+        Team = team;
     }
 
 
