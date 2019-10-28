@@ -93,7 +93,7 @@ public class MeleeUnit : Unit
         }
 
         // Sets default comparison values
-        closest = null;
+        closest = gameObject;
         float closestDistance = float.MaxValue;
 
 
@@ -105,7 +105,7 @@ public class MeleeUnit : Unit
                 closest = go;
             }
         }
-        if (closest != null)
+        if (closest != gameObject)
         {
             transform.LookAt(closest.transform.position);
             if (closestDistance > AttRange && onGround)
@@ -124,10 +124,16 @@ public class MeleeUnit : Unit
     public override void Attack(GameObject target)
     {
         Unit u = target.GetComponent<Unit>();
+        Building b = target.GetComponent<Building>();
         if (u != null)
         {
             u.Damage(AttDamage * Time.deltaTime);
         }
+        else if (b != null)
+        {
+            b.Damage(AttDamage * Time.deltaTime);
+        }
+        
     }
 
     public override void Damage(float amount)

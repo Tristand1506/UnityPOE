@@ -51,20 +51,18 @@ public class Wizard : Unit
         List<GameObject> enemies = new List<GameObject>();
 
         // if not wizard wizards are enemy
-        if (!gameObject.CompareTag("Wizard"))
-        {
-            foreach (GameObject go in GameObject.FindGameObjectsWithTag("Wizard"))
-            {
-                enemies.Add(go);
-            }
-        }
+        
 
         // if not wizard GreenTeam are enemy
         if (!gameObject.CompareTag("GreenTeam"))
         {
             foreach (GameObject go in GameObject.FindGameObjectsWithTag("GreenTeam"))
             {
-                enemies.Add(go);
+                if (go.GetComponent<Building>()!=null)
+                {
+                    enemies.Add(go);
+                }
+                
             }
         }
 
@@ -73,7 +71,10 @@ public class Wizard : Unit
         {
             foreach (GameObject go in GameObject.FindGameObjectsWithTag("RedTeam"))
             {
-                enemies.Add(go);
+                if (go.GetComponent<Building>() != null)
+                {
+                    enemies.Add(go);
+                }
             }
         }
 

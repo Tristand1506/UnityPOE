@@ -22,15 +22,15 @@ public class SpawnBound : MonoBehaviour
     private void Start()
     {
         Vector3 origin = transform.position;
-        Vector3 range = transform.localScale;
+        Vector3 range = transform.localScale / 2.0f;
         
-        for (int i = 0; i <= spawnNumber; i++)
+        for (int i = 0; i < spawnNumber; i++)
         {
             Vector3 randomRange = new Vector3(Random.Range(-range.x, range.x),
                                   Random.Range(-range.y, range.y),
                                   Random.Range(-range.z, range.z));
 
-            Instantiate(unitType, origin + randomRange, Quaternion.identity);
+            Instantiate(unitType, origin + randomRange, transform.rotation);
         }
     }
 }
