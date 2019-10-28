@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class MapManager : MonoBehaviour
 {
@@ -8,6 +9,15 @@ public class MapManager : MonoBehaviour
     private float rescorceRed;
     [SerializeField]
     private float rescorceGreen;
+
+    [SerializeField]
+    Text greens;
+
+    [SerializeField]
+    Text reds;
+
+    [SerializeField]
+    Text win;
 
     private int unitsRed;
     private int unitsGreen;
@@ -29,12 +39,29 @@ public class MapManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        greens.text = "Green's Resources:\n" + RescorceGreen;
+        reds.text = "Red's Resources: " + RescorceRed;
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        greens.text = "Green's Resources: " + RescorceGreen;
+        reds.text = "Red's Resources: " + RescorceRed;
+        CheckUnits();
+    }
+
+    void CheckUnits()
+    {
+        if (GameObject.FindGameObjectsWithTag("GreenTeam")==null)
+        {
+            win.text = "RED WINS!";
+        }
+        else if (GameObject.FindGameObjectsWithTag("RedTeam") == null)
+        {
+            win.text = "GREEN WINS!";
+        }
+
+
     }
 }

@@ -8,6 +8,8 @@ public class MeleeUnit : Unit
     //GLOBALS
     Slider healthSlider;
 
+    float healIntermission;
+
 
     //constructor 
 
@@ -23,13 +25,14 @@ public class MeleeUnit : Unit
 
     private void Start()
     {
-        Health = 20;
+        Health = 50;
         MAX_HEALTH = health;
         Speed = 5;
         AttDamage = 5;
-        AttRange = 3;
+        AttRange = 4;
         Team = team;
 
+        
         //initialising health slider
         
         healthSlider = (gameObject.GetComponentInChildren<Canvas>()).GetComponentInChildren<Slider>();
@@ -38,6 +41,9 @@ public class MeleeUnit : Unit
 
     private void Update()
     {
+        healIntermission += Time.deltaTime;
+        OutOfBounds();
+       
         Move();
     }
 
@@ -108,7 +114,30 @@ public class MeleeUnit : Unit
         if (closest != gameObject)
         {
             transform.LookAt(closest.transform.position);
-            if (closestDistance > AttRange && onGround)
+            if (Health<=MAX_HEALTH*0.75f && closestDistance > AttRange && onGround)
+            {
+                if (healIntermission >= 2.0f)
+                {
+                    Health += 5;
+                    healthSlider = (gameObject.GetComponentInChildren<Canvas>()).GetComponentInChildren<Slider>();
+
+                    if (healthSlider != null)
+                    {
+                        healthSlider.value = health / MAX_HEALTH;
+                    }
+                    healIntermission = 0;
+                }
+                if (Health <= MAX_HEALTH * 0.55f)
+                {
+                    transform.Translate(Vector3.forward * (2.5f * Speed) * Time.deltaTime);
+                }
+                else
+                {
+                    transform.Translate(Vector3.forward * Speed * Time.deltaTime);
+                }
+                
+            }
+            else if (closestDistance > AttRange && onGround)
             {
                 transform.Translate(Vector3.forward * Speed * Time.deltaTime);
             }
@@ -127,7 +156,15 @@ public class MeleeUnit : Unit
         Building b = target.GetComponent<Building>();
         if (u != null)
         {
-            u.Damage(AttDamage * Time.deltaTime);
+            if (health<=MAX_HEALTH*0.55f)
+            {
+                u.Damage((AttDamage*2.5f)* Time.deltaTime);
+            }
+            else
+            {
+                u.Damage(AttDamage * Time.deltaTime);
+            }
+            
         }
         else if (b != null)
         {
@@ -138,8 +175,9 @@ public class MeleeUnit : Unit
 
     public override void Damage(float amount)
     {
-        healthSlider = (gameObject.GetComponentInChildren<Canvas>()).GetComponentInChildren<Slider>();
         health -= amount;
+        healthSlider = (gameObject.GetComponentInChildren<Canvas>()).GetComponentInChildren<Slider>();
+        
         if (healthSlider != null)
         {
             healthSlider.value = health / MAX_HEALTH;
@@ -154,5 +192,13 @@ public class MeleeUnit : Unit
     private void Death()
     {
         Destroy(gameObject);
+    }
+
+    private void OutOfBounds()
+    {
+        if (gameObject.transform.position.y<-1)
+        {
+            Death();
+        }
     }
 }

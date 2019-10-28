@@ -25,9 +25,9 @@ public class RangeUnit : Unit
     {
         Health = 15;
         MAX_HEALTH = health;
-        Speed = 7;
+        Speed = 6;
         AttDamage = 2;
-        AttRange = 35;
+        AttRange = 15;
         Team = team;
 
         //initialising health slider
@@ -38,6 +38,7 @@ public class RangeUnit : Unit
 
     private void Update()
     {
+        OutOfBounds();
         Move();
     }
 
@@ -108,7 +109,15 @@ public class RangeUnit : Unit
         if (closest != gameObject)
         {
             transform.LookAt(closest.transform.position);
-            if (closestDistance > AttRange && onGround)
+            if (Health < MAX_HEALTH * 0.30f && closestDistance < 40)
+            {
+                transform.Translate(Vector3.forward * (-Speed * 0.5f) * Time.deltaTime);
+            }
+            else if (closestDistance<=AttRange/2)
+            {
+                transform.Translate(Vector3.forward * (-Speed *0.5f) * Time.deltaTime);
+            }
+            else if (closestDistance > AttRange && onGround)
             {
                 transform.Translate(Vector3.forward * Speed * Time.deltaTime);
             }
@@ -153,5 +162,13 @@ public class RangeUnit : Unit
     private void Death()
     {
         Destroy(gameObject);
+    }
+
+    private void OutOfBounds()
+    {
+        if (gameObject.transform.position.y < -1)
+        {
+            Death();
+        }
     }
 }

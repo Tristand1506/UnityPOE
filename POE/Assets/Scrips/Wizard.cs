@@ -28,8 +28,8 @@ public class Wizard : Unit
         Health = 20;
         MAX_HEALTH = health;
         Speed = 5;
-        AttDamage = 5;
-        AttRange = 3;
+        AttDamage = 4;
+        AttRange = 10;
         Team = team;
 
         //initialising health slider
@@ -40,6 +40,7 @@ public class Wizard : Unit
 
     private void Update()
     {
+        OutOfBounds();
         Move();
     }
 
@@ -95,12 +96,20 @@ public class Wizard : Unit
         {
             transform.LookAt(closest.transform.position);
             attIntermission += Time.deltaTime;
-            if (closestDistance > AttRange && onGround)
+            if (Health <= MAX_HEALTH * 0.50f)
+            {
+                transform.Translate(Vector3.forward * -Speed * Time.deltaTime);
+            }
+            else if (closestDistance < 3)
+            {
+                transform.Translate(Vector3.forward * -Speed * Time.deltaTime);
+            }
+            else if (closestDistance > AttRange && onGround)
             {
                 transform.Translate(Vector3.forward * Speed * Time.deltaTime);
                 
             }
-            else if (inRadius.Count>0)
+            if (inRadius.Count>0)
             {
                 if (attIntermission>=2)
                 { 
@@ -155,5 +164,13 @@ public class Wizard : Unit
     private void Death()
     {
         Destroy(gameObject);
+    }
+
+    private void OutOfBounds()
+    {
+        if (gameObject.transform.position.y < -1)
+        {
+            Death();
+        }
     }
 }

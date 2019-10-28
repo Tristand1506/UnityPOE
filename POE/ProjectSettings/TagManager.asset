@@ -9,6 +9,7 @@ TagManager:
   - Wizard
   - Floor
   - GM
+  - HUD
   layers:
   - Default
   - TransparentFX

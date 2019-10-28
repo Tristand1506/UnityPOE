@@ -24,7 +24,7 @@ public class ResourceBuilding : Building
     // Start is called before the first frame update
     void Start()
     {
-        resRemaining = Random.Range(200, 1000);
+        resRemaining = Random.Range(500, 2000);
         resRate = Random.Range(10, 50);
         resIntemssion = 2.0f;
 
