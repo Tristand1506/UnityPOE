@@ -11,6 +11,8 @@ public class BarraksBuilding : Building
 
     [SerializeField]
     GameObject unitType;
+    [SerializeField]
+    private int spawnCost;
 
     float spawnWait;
     float spawnIntemssion;
@@ -24,7 +26,8 @@ public class BarraksBuilding : Building
     }
     private void Start()
     {
-        spawnIntemssion = 5.0f;
+        spawnCost = 100;
+        spawnIntemssion = Random.Range(5,15);
         Health = 100;
         MAX_HEALTH = Health;
     }
@@ -64,10 +67,32 @@ public class BarraksBuilding : Building
 
     private void Spawn()
     {
-        Vector3 spawnLoc = transform.position + (transform.forward*5);
+        bool canSpawn = false;
+        MapManager gM = GameObject.FindGameObjectWithTag("GM").GetComponent<MapManager>();
+        if (gameObject.CompareTag("GreenTeam"))
+        {
+            if (gM.RescorceGreen > spawnCost)
+            {
+                gM.RescorceGreen -= spawnCost;
+                canSpawn = true;
+            }
+        }
+        else if (gameObject.CompareTag("RedTeam"))
+        {
+            if (gM.RescorceRed > spawnCost)
+            {
+                gM.RescorceRed -= spawnCost;
+                canSpawn = true;
+            }
+        }
+        if (canSpawn)
+        {
+            Vector3 spawnLoc = transform.position + (transform.forward * 5);
+
+
+            Instantiate(unitType, spawnLoc, Quaternion.identity);
+        }
         
-        
-        Instantiate(unitType, spawnLoc, Quaternion.identity);
     }
 }
 

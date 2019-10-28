@@ -4,7 +4,9 @@ using UnityEngine;
 
 public class MapManager : MonoBehaviour
 {
+    [SerializeField]
     private float rescorceRed;
+    [SerializeField]
     private float rescorceGreen;
 
     private int unitsRed;

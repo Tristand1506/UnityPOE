@@ -8,6 +8,7 @@ TagManager:
   - RedTeam
   - Wizard
   - Floor
+  - GM
   layers:
   - Default
   - TransparentFX

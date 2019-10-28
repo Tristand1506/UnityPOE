@@ -58,7 +58,7 @@ public class Wizard : Unit
         {
             foreach (GameObject go in GameObject.FindGameObjectsWithTag("GreenTeam"))
             {
-                if (go.GetComponent<Building>()!=null)
+                if (go.GetComponent<Building>() == null)
                 {
                     enemies.Add(go);
                 }
@@ -71,7 +71,7 @@ public class Wizard : Unit
         {
             foreach (GameObject go in GameObject.FindGameObjectsWithTag("RedTeam"))
             {
-                if (go.GetComponent<Building>() != null)
+                if (go.GetComponent<Building>() == null)
                 {
                     enemies.Add(go);
                 }
